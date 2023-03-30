@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Add Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div id="floating-panel">
+        <div>
+          <input type="text" id="from" placeholder="Origin">
+        </div>
+
+        <div>
+          <input type="text" id="to" placeholder="Destination">
+        </div>
+
+        <div>
+          <button id="submitBtn" type="submit">Go</button>
+        </div>
+
+        <!-- <form onsubmit="calculateAndDisplayRoute(directionsService, directionsRenderer)">
+          <input type="submit">
+        </form> -->
+
+      <!-- <b>Mode of Travel</b>
+      <select id="mode">
+        <option value="DRIVING">Driving</option>
+        <option value="WALKING">Walking</option>
+      </select> -->
+
+    </div>
+
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <!-- 
+      The `defer` attribute causes the callback to execute after the full HTML
+      document has been parsed. For non-blocking uses, avoiding race conditions,
+      and consistent behavior across browsers, consider loading using Promises
+      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+      -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK67Qgj-02HWAAEPKEcBksvc0abb6qj6g&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
