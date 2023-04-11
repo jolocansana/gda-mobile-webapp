@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AccountView from '../views/AccountView.vue'
 import CarView from '../views/CarView.vue'
 import MapView from '../views/MapView.vue'
+import TireView from '../views/Car/TireView.vue'
+import EngineView from '../views/Car/EngineView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +19,7 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: CarView
+      component: CarView,
     },
     {
       path: '/account',
@@ -26,7 +28,17 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: AccountView
-    }
+    },
+    {
+      path: '/car/tires',
+      name: 'tires',
+      component: TireView,
+    },
+    {
+      path: '/car/engine',
+      name: 'engine',
+      component: EngineView,
+    },
   ]
 })
 

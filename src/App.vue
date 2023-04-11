@@ -1,10 +1,10 @@
 <template>
-  <div class="vh-100 d-flex flex-column">
-    <div class="flex-fill">
+  <div class="m-0 d-flex flex-column">
+    <div class="">
       <RouterView />
     </div>
-    <Navbar />
   </div>
+  <Navbar />
 </template>
 
 <script setup>

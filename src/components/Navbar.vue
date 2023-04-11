@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <nav class="d-flex justify-content-evenly h-100 align-items-center">
+    <nav class="d-flex justify-content-around h-100 align-items-center">
       <RouterLink to="/car">
         <div class="d-flex flex-column text-center">
           <i class="fa-solid fa-car"></i>
@@ -33,6 +33,9 @@ import {RouterLink} from 'vue-router'
     height: 5rem;
     font-size: 2rem;
     color: black;
+    position: fixed;
+    bottom: 0;
+    min-width: 100%;
   }
 
   a {
