@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex flex-column">
     <div class="d-flex justify-content-center align-items-center">
-      <div class="image-container">
-        <img src="src\assets\car.png" alt="car" id="car-image" usemap="#carMap">
+      <div id="car-container" class="image-container">
+        <!-- <img src="src\assets\car.png" alt="car" id="car-image" usemap="#carMap"> -->
       </div>
     </div>
     <div class="">
@@ -36,9 +36,55 @@
 
 <script setup>
 import { onMounted } from 'vue';
+import * as THREE from 'three';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 
+  75, 
+  window.innerWidth / window.innerHeight, 
+  0.1, 
+  10000
+);
+const loader = new OBJLoader();
+
+// load a resource
+loader.load(
+  // resource URL
+  'src/assets/mercedes-and-nissan-cars-3d-model/Nissan_skyline/Nissan_skyline.obj',
+  // called when resource is loaded
+  function ( object ) {
+
+    scene.add( object );
+
+  },
+  // called when loading is in progresses
+  function ( xhr ) {
+
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+  },
+  // called when loading has errors
+  function ( error ) {
+
+    console.log( error );
+
+  }
+);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight/2);
+
+function animate() {
+	requestAnimationFrame( animate );
+
+	renderer.render( scene, camera );
+}
+
 
 onMounted(() => {
-  // run code once page has been mounted
+  document.getElementById('car-container').appendChild( renderer.domElement );
+  animate();
 })
 </script>
 
