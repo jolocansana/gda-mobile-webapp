@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column">
+  <div class="d-flex flex-column container">
     <div class="d-flex justify-content-center align-items-center">
       <div id="car-container" class="image-container">
         <img src="/../src/assets/car/engine.png" alt="car" id="car-image" />
