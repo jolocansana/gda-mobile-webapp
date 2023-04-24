@@ -4,6 +4,7 @@ import CarView from '../views/CarView.vue'
 import MapView from '../views/MapView.vue'
 import TireView from '../views/Car/TireView.vue'
 import EngineView from '../views/Car/EngineView.vue'
+import ACView from '../views/Car/ACView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/car/engine',
       name: 'engine',
       component: EngineView,
+    },
+    {
+      path: '/car/ac',
+      name: 'ac',
+      component: ACView,
     },
   ]
 })

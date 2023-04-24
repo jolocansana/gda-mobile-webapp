@@ -1,0 +1,6 @@
+﻿car_id,email_address,make,model,year,year_first_bought,color
+TA001,johndoe@gmail.com,Toyota,Altis,2019,2019,Silver
+TA002,jamesfranco@outlook.com,Toyota,Altis,2019,2019,Gold
+TA003,carlossainz@gmail.com,Toyota,Altis,2018,2019,Red
+TA004,pierre.gasly@gmail.com,Toyota,Altis,2020,2020,Black
+TA005,charles.dnf.leclerc@outlook.com,Toyota,Altis,2022,2023,Blue

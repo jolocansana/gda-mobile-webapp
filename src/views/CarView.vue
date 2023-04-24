@@ -1,8 +1,27 @@
 <template>
-  <div class="d-flex flex-column">
+  <div class="modal" tabindex="-1" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body d-flex flex-column text-center">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+          <i class="fa-solid fa-car-side" style="font-size: 7rem;"></i>
+          <h1 class="mt-2">Pump your tires!</h1>
+          <p>Your left rear tires are in a unsuitable pressure level. Proceed to the nearest gas station to get your tires pumped.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="d-flex flex-column container">
     <div class="d-flex justify-content-center align-items-center">
       <div id="car-container" class="image-container">
-        <!-- <img src="src\assets\car.png" alt="car" id="car-image" usemap="#carMap"> -->
+        <img src="src\assets\car\full-orientation.png" alt="car" id="car-image">
       </div>
     </div>
     <div class="">
@@ -12,19 +31,19 @@
     <div class="mt-3">
       <h1>Car Status</h1>
 
-      <div class="d-flex flex-wrap vw-100">
+      <div class="d-flex flex-wrap w-100 text-center">
 
-        <RouterLink to="car/tires" class="status-grid d-flex flex-column">
+        <RouterLink to="car/tires" class="status-grid d-flex flex-column flex-grow-1">
           <b class="status text-success">Good</b>
           <span>Tire Pressure</span>
         </RouterLink>
 
-        <div class="status-grid d-flex flex-column">
+        <RouterLink to="car/ac" class="status-grid d-flex flex-column flex-grow-1">
           <b class="status text-warning">Ok</b>
-          <span>Oil Levels</span>
-        </div>
+          <span>AC Temperature</span>
+        </RouterLink>
 
-        <RouterLink to="car/engine" class="status-grid d-flex flex-column">
+        <RouterLink to="car/engine" class="status-grid d-flex flex-column flex-grow-1">
           <b class="status text-danger">Check</b>
           <span>Engine Temperature</span>
         </RouterLink>
@@ -36,55 +55,10 @@
 
 <script setup>
 import { onMounted } from 'vue';
-import * as THREE from 'three';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 
-  75, 
-  window.innerWidth / window.innerHeight, 
-  0.1, 
-  10000
-);
-const loader = new OBJLoader();
-
-// load a resource
-loader.load(
-  // resource URL
-  'src/assets/mercedes-and-nissan-cars-3d-model/Nissan_skyline/Nissan_skyline.obj',
-  // called when resource is loaded
-  function ( object ) {
-
-    scene.add( object );
-
-  },
-  // called when loading is in progresses
-  function ( xhr ) {
-
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-  },
-  // called when loading has errors
-  function ( error ) {
-
-    console.log( error );
-
-  }
-);
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight/2);
-
-function animate() {
-	requestAnimationFrame( animate );
-
-	renderer.render( scene, camera );
-}
-
 
 onMounted(() => {
-  document.getElementById('car-container').appendChild( renderer.domElement );
-  animate();
+  var myModal = new bootstrap.Modal(document.getElementById("myModal"));
+  myModal.toggle();
 })
 </script>
 

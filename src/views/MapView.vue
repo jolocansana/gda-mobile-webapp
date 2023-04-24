@@ -1,25 +1,25 @@
 <template>
-<div class="modal" tabindex="-1" id="myModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Sample Alert Notifcation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Alert Notification Body</p>
-      </div>
-    </div>
-  </div>
-</div>
+  <div id="map"></div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from "vue";
 
 onMounted(() => {
-    var myModal = new bootstrap.Modal(document.getElementById('myModal'))
+  var map = L.map("map").setView([51.505, -0.09], 13);
 
-    myModal.toggle();
-})
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
+
+});
 </script>
+
+<style>
+#map {
+  height: 100vh;
+  z-index: -1;
+}
+</style>
