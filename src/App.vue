@@ -11,6 +11,7 @@
 import {RouterView} from 'vue-router'
 import Navbar from './components/Navbar.vue'
 import { onMounted, ref } from 'vue';
+import axios from 'axios';
 
 //
 // Variable and Config Declaration
@@ -131,7 +132,7 @@ const generate_data = (is_generate_data) => {
     if(car_data_array.value.length >= 24) car_data_array.value.shift()
 
     // Every 2 minutes, aggregate and send data to AWS
-    if(data_counter.value == data_counter_max) sendDataToAWS()
+    if(data_counter.value == data_counter_max) console.log('replace with send data to aws')
     else data_counter.value++
 
     console.log('DATA_GEN: ', car_data_array.value, car_data_array.value.length, data_counter.value)
@@ -144,25 +145,47 @@ const sendDataToAWS = () => {
   // averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh')
   
   // Average Data
+  // const agg_data = {
+  //   metrics_id: generateString(12),
+  //   car_id: CAR_ID,
+  //   time_of_record: new Date(),
+  //   carAC_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'carAC_temp_celcius'),
+  //   engine_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_temp_celcius'),
+  //   FL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FL_tyre_pressure_psi'),
+  //   FR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FR_tyre_pressure_psi'),
+  //   RL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RL_tyre_pressure_psi'),
+  //   RR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RR_tyre_pressure_psi'),
+  //   speed_kmh: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh'),
+  //   engine_speed_rpm: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_speed_rpm'),
+  //   air_flow_gs: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'air_flow_gs'),
+  //   MAP_inHg: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'MAP_inHg'),
+  //   mileage_km: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'mileage_km'),
+  //   is_vehicle_moving: true
+  // }
+
   const agg_data = {
-    metrics_id: generateString(12),
-    car_id: CAR_ID,
-    time_of_record: new Date(),
-    carAC_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'carAC_temp_celcius'),
-    engine_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_temp_celcius'),
-    FL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FL_tyre_pressure_psi'),
-    FR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FR_tyre_pressure_psi'),
-    RL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RL_tyre_pressure_psi'),
-    RR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RR_tyre_pressure_psi'),
-    speed_kmh: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh'),
-    engine_speed_rpm: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_speed_rpm'),
-    air_flow_gs: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'air_flow_gs'),
-    MAP_inHg: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'MAP_inHg'),
-    mileage_km: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'mileage_km'),
-    is_vehicle_moving: true
-  }
+    "metrics_id": " IKcf4sILbHQT",
+    "car_id": "TA001",
+    "time_of_record": "2023-04-25T14:24:09.663Z",
+    "carAC_temp_celcius": 15,
+    "engine_temp_celcius": 86,
+    "FL_tyre_pressure_psi": 35,
+    "FR_tyre_pressure_psi": 30,
+    "RL_tyre_pressure_psi": 35,
+    "RR_tyre_pressure_psi": 34,
+    "speed_kmh": 7,
+    "engine_speed_rpm": 0,
+    "air_flow_gs": 4,
+    "MAP_inHg": 8,
+    "mileage_km": 2132,
+    "is_vehicle_moving": true
+}
 
   console.log('AVG DATA:', agg_data)
+
+  axios.post('https://9maxqtli1a.execute-api.ap-southeast-1.amazonaws.com/recommendEco', {agg_data}).then(resp => {
+    console.log(resp)
+  })
 
 }
 
@@ -173,6 +196,8 @@ const sendDataToAWS = () => {
 setInterval(() => {
   generate_data(is_generate_data)
 }, 10000)
+
+sendDataToAWS()
 
 // const sample_arr = [
 //   {one: 1, two: 2, three: 3},
