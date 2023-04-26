@@ -1,23 +1,4 @@
 <template>
-  <div class="modal" tabindex="-1" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body d-flex flex-column text-center">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-          <i class="fa-solid fa-car-side" style="font-size: 7rem;"></i>
-          <h1 class="mt-2">Pump your tires!</h1>
-          <p>Your left rear tires are in a unsuitable pressure level. Proceed to the nearest gas station to get your tires pumped.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
   <div class="d-flex flex-column container">
     <div class="d-flex justify-content-center align-items-center">
       <div id="car-container" class="image-container">
@@ -57,8 +38,7 @@
 import { onMounted } from 'vue';
 
 onMounted(() => {
-  var myModal = new bootstrap.Modal(document.getElementById("myModal"));
-  myModal.toggle();
+
 })
 </script>
 
