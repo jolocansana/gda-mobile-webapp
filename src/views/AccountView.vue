@@ -1,22 +1,4 @@
 <template>
-  <div class="modal" tabindex="-1" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-body d-flex flex-column text-center">
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-          <i class="fa-solid fa-temperature-arrow-down" style="font-size: 7rem;"></i>
-          <h1 class="mt-2">Bring your temperature to 20C</h1>
-          <p>Since the outside temperatures are in 26C, it is advisable to adjust your temperature to save gas but remain comfortable.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="d-flex justify-content-center align-items-center w-100 text-center flex-column mt-5">
     <img src="../assets/charles-leclerc-ferrari-1.jpg" alt="photo" width="250" class="rounded-circle mb-3">
     <h2>Charles Leclerc</h2>
@@ -77,8 +59,8 @@ onMounted(() => {
 
   console.log(all_users.value)
 
-  var myModal = new bootstrap.Modal(document.getElementById("myModal"));
-  myModal.toggle();
+  // var myModal = new bootstrap.Modal(document.getElementById("myModal"));
+  // myModal.toggle();
   // axios.get('https://4rmmyhvha9.execute-api.ap-southeast-1.amazonaws.com/testFunc').then((response) => {
   //   alert_body.value = response.data
   //   myModal.toggle();
