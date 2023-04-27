@@ -230,6 +230,12 @@ const sendDataToAWS = () => {
 
   let string_data = JSON.stringify(agg_data)
 
+  // Push data to RDS
+  axios.post('https://abs0mxhj35.execute-api.ap-southeast-1.amazonaws.com/prod/pushRDS', string_data).then(resp => {
+    console.log(resp)
+  }).catch(err => console.log(err))
+
+  // Process data for recommendations
   axios.post('https://voj3iwpcb7.execute-api.ap-southeast-1.amazonaws.com/prod/recommendeco', string_data).then(resp => {
     for (var item of resp.data) notifications.value.push(item)
     console.log(resp)
@@ -245,6 +251,8 @@ setInterval(() => {
   generate_data(is_generate_data)
   renderNotifications()
 }, 10000)
+
+// sendDataToAWS()
 
 onMounted(() => {
   myModal = new bootstrap.Modal(document.getElementById("myModal"));
