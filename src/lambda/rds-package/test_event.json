@@ -1,0 +1,20 @@
+{
+    "Records": [
+      {
+        "messageId": "059f36b4-87a3-44ab-83d2-661975830a7d",
+        "receiptHandle": "AQEBwJnKyrHigUMZj6rYigCgxlaS3SLy0a...",
+        "body": "{\"metrics_id\": \" IKcf4sILbHQT\",\"car_id\": \"TA001\",\"time_of_record\": \"2023-04-25T14:24:09.663Z\",\"env_temp_celcius\": 15,\"carAC_temp_celcius\": 15,\"engine_temp_celcius\": 86,\"FL_tyre_pressure_psi\": 35,\"FR_tyre_pressure_psi\": 30,\"RL_tyre_pressure_psi\": 35,\"RR_tyre_pressure_psi\": 34,\"speed_kmh\": 7,\"engine_speed_rpm\": 0,\"air_flow_gs\": 4,\"MAP_inHg\": 8,\"mileage_km\": 2132,\"is_vehicle_moving\": true}",
+        "attributes": {
+          "ApproximateReceiveCount": "1",
+          "SentTimestamp": "1545082649183",
+          "SenderId": "AIDAIENQZJOLO23YVJ4VO",
+          "ApproximateFirstReceiveTimestamp": "1545082649185"
+        },
+        "messageAttributes": {},
+        "md5OfBody": "e4e68fb7bd0e697a0ae8f1bb342846b3",
+        "eventSource": "aws:sqs",
+        "eventSourceARN": "arn:aws:sqs:us-west-2:123456789012:my-queue",
+        "awsRegion": "us-west-2"
+      }
+    ]
+  }
