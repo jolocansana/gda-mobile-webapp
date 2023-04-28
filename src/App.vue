@@ -1,4 +1,22 @@
 <template>
+  <div class="modal" tabindex="-1" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body d-flex flex-column text-center">
+          <button
+            type="button"
+            class="btn-close"
+            @click="closeModal"
+            aria-label="Close"
+          ></button>
+          <i :class="icon" style="font-size: 7rem;"></i>
+          <h1 class="mt-2">{{ title }}</h1>
+          <p>{{ message }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="m-0 d-flex flex-column">
     <div class="">
       <RouterView />
@@ -22,7 +40,31 @@ let data_counter = ref(1)
 let data_counter_max = 12
 var is_generate_data = true
 
+var myModal
+const notifications = ref([])
+const icon = ref('')
+const title = ref('')
+const message = ref('')
+const isModalActive = ref(false)
+
 let CAR_ID = 'TA001'
+let test_agg_data = {
+    "metrics_id": " IKcf4sILbHQT",
+    "car_id": "TA001",
+    "time_of_record": "2023-04-25T14:24:09.663Z",
+    "carAC_temp_celcius": 15,
+    "engine_temp_celcius": 86,
+    "FL_tyre_pressure_psi": 35,
+    "FR_tyre_pressure_psi": 30,
+    "RL_tyre_pressure_psi": 35,
+    "RR_tyre_pressure_psi": 34,
+    "speed_kmh": 7,
+    "engine_speed_rpm": 0,
+    "air_flow_gs": 4,
+    "MAP_inHg": 8,
+    "mileage_km": 2132,
+    "is_vehicle_moving": true
+}
 
 //
 // Helper Functions
@@ -43,8 +85,27 @@ function generateString(length) {
 function averageFieldName(arr, key_name) {
   var key_arr = arr.map((item) => {return item[key_name]})
   var avg = key_arr.reduce((a, b) => a + b, 0) / key_arr.length
-  console.log(Math.round(avg))
+  // console.log(Math.round(avg))
   return Math.round(avg)
+}
+
+function renderNotifications() {
+  if(notifications.value.length > 0 && !isModalActive.value) {
+    var latest_notif = notifications.value.pop()
+    console.log(latest_notif)
+    icon.value = latest_notif.icon
+    title.value = latest_notif.title
+    message.value = latest_notif.message
+    isModalActive.value = true
+    myModal.show()
+  }
+  console.log('NOTIF: ', notifications.value)
+}
+
+
+function closeModal(){
+  myModal.hide()
+  isModalActive.value = false
 }
 
 //
@@ -106,7 +167,7 @@ const generate_data = (is_generate_data) => {
     var curr_speed = changeSpeed(latest_metric.speed_kmh)
     var curr_FR_tyre_pressure = latest_metric.FR_tyre_pressure_psi + (Math.random() < 0.2 && latest_metric.FR_tyre_pressure_psi > 30 ? -5 : 0)
 
-    console.log('NEW VALUES', curr_speed, curr_FR_tyre_pressure)
+    console.log('NEW VALUES SPEED: ', curr_speed, 'TYRE: ', curr_FR_tyre_pressure)
 
     var car_data = {
       metrics_id: generateString(12),
@@ -132,60 +193,53 @@ const generate_data = (is_generate_data) => {
     if(car_data_array.value.length >= 24) car_data_array.value.shift()
 
     // Every 2 minutes, aggregate and send data to AWS
-    if(data_counter.value == data_counter_max) console.log('replace with send data to aws')
+    if(data_counter.value == data_counter_max) sendDataToAWS()
     else data_counter.value++
 
-    console.log('DATA_GEN: ', car_data_array.value, car_data_array.value.length, data_counter.value)
+    console.log('DATA_GEN: ', car_data_array.value, '\nARRAY LENGTH: ', car_data_array.value.length, '\nCOUNT: ', data_counter.value)
   }
 }
 
 const sendDataToAWS = () => {
   const startIndex = (car_data_array.value.length < 15 ? 0 : 12)
   data_counter.value = 1
-  // averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh')
+  averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh')
   
   // Average Data
-  // const agg_data = {
-  //   metrics_id: generateString(12),
-  //   car_id: CAR_ID,
-  //   time_of_record: new Date(),
-  //   carAC_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'carAC_temp_celcius'),
-  //   engine_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_temp_celcius'),
-  //   FL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FL_tyre_pressure_psi'),
-  //   FR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FR_tyre_pressure_psi'),
-  //   RL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RL_tyre_pressure_psi'),
-  //   RR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RR_tyre_pressure_psi'),
-  //   speed_kmh: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh'),
-  //   engine_speed_rpm: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_speed_rpm'),
-  //   air_flow_gs: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'air_flow_gs'),
-  //   MAP_inHg: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'MAP_inHg'),
-  //   mileage_km: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'mileage_km'),
-  //   is_vehicle_moving: true
-  // }
-
   const agg_data = {
-    "metrics_id": " IKcf4sILbHQT",
-    "car_id": "TA001",
-    "time_of_record": "2023-04-25T14:24:09.663Z",
-    "carAC_temp_celcius": 15,
-    "engine_temp_celcius": 86,
-    "FL_tyre_pressure_psi": 35,
-    "FR_tyre_pressure_psi": 30,
-    "RL_tyre_pressure_psi": 35,
-    "RR_tyre_pressure_psi": 34,
-    "speed_kmh": 7,
-    "engine_speed_rpm": 0,
-    "air_flow_gs": 4,
-    "MAP_inHg": 8,
-    "mileage_km": 2132,
-    "is_vehicle_moving": true
-}
+    metrics_id: generateString(12),
+    car_id: CAR_ID,
+    time_of_record: new Date(),
+    carAC_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'carAC_temp_celcius'),
+    engine_temp_celcius: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_temp_celcius'),
+    FL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FL_tyre_pressure_psi'),
+    FR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'FR_tyre_pressure_psi'),
+    RL_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RL_tyre_pressure_psi'),
+    RR_tyre_pressure_psi: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'RR_tyre_pressure_psi'),
+    speed_kmh: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'speed_kmh'),
+    engine_speed_rpm: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'engine_speed_rpm'),
+    air_flow_gs: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'air_flow_gs'),
+    MAP_inHg: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'MAP_inHg'),
+    mileage_km: averageFieldName(car_data_array.value.slice(startIndex, startIndex+11), 'mileage_km'),
+    is_vehicle_moving: true
+  }
 
-  console.log('AVG DATA:', agg_data)
+  // const agg_data = test_agg_data
+  // console.log('AVG DATA:', agg_data)
 
-  axios.post('https://9maxqtli1a.execute-api.ap-southeast-1.amazonaws.com/recommendEco', {agg_data}).then(resp => {
+
+  let string_data = JSON.stringify(agg_data)
+
+  // Push data to RDS
+  axios.post('https://abs0mxhj35.execute-api.ap-southeast-1.amazonaws.com/prod/pushRDS', string_data).then(resp => {
     console.log(resp)
-  })
+  }).catch(err => console.log(err))
+
+  // Process data for recommendations
+  axios.post('https://voj3iwpcb7.execute-api.ap-southeast-1.amazonaws.com/prod/recommendeco', string_data).then(resp => {
+    for (var item of resp.data) notifications.value.push(item)
+    console.log(resp)
+  }).catch(err => console.log(err))
 
 }
 
@@ -195,20 +249,14 @@ const sendDataToAWS = () => {
 
 setInterval(() => {
   generate_data(is_generate_data)
+  renderNotifications()
 }, 10000)
 
-sendDataToAWS()
+// sendDataToAWS()
 
-// const sample_arr = [
-//   {one: 1, two: 2, three: 3},
-//   {one: 10, two: 2, three: 6},
-//   {one: 1, two: 5, three: 5},
-// ]
-
-// const sample_key = 'one'
-// console.log(sample_arr.map(item=>{return item[sample_key]}))
-
-
+onMounted(() => {
+  myModal = new bootstrap.Modal(document.getElementById("myModal"));
+})
 </script>
 
 <style>
